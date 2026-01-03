@@ -1,5 +1,5 @@
 // sw.js - tiny offline cache for Killian's Spin the Wheel
-const CACHE_NAME = "killians-wheel-v1";
+const CACHE_NAME = "killians-wheel-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -30,3 +30,4 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
 });
+
