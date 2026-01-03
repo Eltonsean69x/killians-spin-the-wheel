@@ -1,985 +1,326 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kid Casino Wheel (Offline)</title>
-  <style>
-    :root{
-      --bg1:#070716;
-      --bg2:#120a2a;
-      --neon:#7CFFCB;
-      --hot:#FF4DDE;
-      --gold:#FFD36A;
-      --danger:#FF3B3B;
-      --text:#f4f6ff;
-      --muted:#c9c9ff;
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-      --panel: rgba(255,255,255,.06);
-      --panel2: rgba(255,255,255,.10);
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --radius: 22px;
-    }
+<title>Killian’s Spin the Wheel</title>
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--text);
-      overflow-x:hidden;
-      background:
-        radial-gradient(900px 600px at 20% 10%, rgba(255,77,222,.18), transparent 60%),
-        radial-gradient(800px 500px at 80% 20%, rgba(124,255,203,.15), transparent 60%),
-        radial-gradient(900px 600px at 50% 90%, rgba(255,211,106,.12), transparent 60%),
-        linear-gradient(160deg, var(--bg1), var(--bg2));
-    }
+<link rel="manifest" href="manifest.webmanifest">
 
-    /* Animated sparkly background */
-    .sparkles{
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.6;
-      background-image:
-        radial-gradient(circle at 12px 14px, rgba(255,255,255,.20) 2px, transparent 3px),
-        radial-gradient(circle at 45px 60px, rgba(255,255,255,.14) 1px, transparent 2px),
-        radial-gradient(circle at 80px 20px, rgba(255,255,255,.10) 1px, transparent 2px);
-      background-size: 120px 120px, 160px 160px, 220px 220px;
-      animation: drift 18s linear infinite;
-      filter: blur(.15px);
-    }
-    @keyframes drift{
-      from{ transform:translate3d(0,0,0) }
-      to{ transform:translate3d(-220px, 120px, 0) }
-    }
+<style>
+:root{
+  --bg1:#0b1020;
+  --bg2:#120a2a;
+  --text:#ffffff;
+  --muted:#cbd5e1;
+  --good:#22c55e;
+  --skull:#ef4444;
+  --myst:#a855f7;
+  --shadow:0 20px 60px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:var(--text);
+  background:
+    radial-gradient(900px 600px at 20% 10%, rgba(168,85,247,.25), transparent 60%),
+    radial-gradient(800px 600px at 80% 20%, rgba(34,197,94,.2), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
 
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 22px 18px 60px;
-    }
+.stars{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.25) 40%, transparent 41%),
+    radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,.18) 40%, transparent 41%),
+    radial-gradient(1px 1px at 70% 35%, rgba(255,255,255,.18) 40%, transparent 41%);
+  opacity:.6;
+}
 
-    header{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom: 18px;
-    }
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:18px;
+}
 
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .title{
-      font-size: clamp(22px, 3.2vw, 34px);
-      letter-spacing:.5px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .badge{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(124,255,203,.22), rgba(255,77,222,.22));
-      border: 1px solid rgba(255,255,255,.18);
-      color: var(--muted);
-    }
-    .subtitle{
-      color:var(--muted);
-      font-size: 14px;
-      line-height:1.2;
-    }
+h1{
+  margin:0 0 6px 0;
+  font-size:28px;
+}
+.sub{
+  color:var(--muted);
+  font-size:14px;
+}
 
-    .panel{
-      background: linear-gradient(180deg, var(--panel), rgba(0,0,0,.10));
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
+.controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:14px 0;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 16px;
-    }
-    @media (max-width: 900px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+button{
+  border:0;
+  border-radius:14px;
+  padding:12px 16px;
+  font-weight:800;
+  cursor:pointer;
+}
 
-    .stage{
-      padding: 16px;
-      position:relative;
-    }
+.spin{
+  background:linear-gradient(90deg,#86efac,#fde047,#fb7185,#a855f7);
+  color:#0b1020;
+}
 
-    .stageTop{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      margin-bottom: 12px;
-    }
+.secondary{
+  background:rgba(255,255,255,.1);
+  color:white;
+}
 
-    .bigBtn{
-      appearance:none;
-      border:0;
-      color: #081012;
-      font-weight: 900;
-      letter-spacing:.8px;
-      padding: 14px 18px;
-      border-radius: 16px;
-      cursor:pointer;
-      background: linear-gradient(90deg, var(--neon), var(--gold), var(--hot));
-      box-shadow: 0 14px 40px rgba(255,77,222,.18);
-      transition: transform .08s ease, filter .2s ease;
-      text-transform:uppercase;
-      font-size: 14px;
-      min-width: 190px;
-    }
-    .bigBtn:hover{ filter: brightness(1.06); }
-    .bigBtn:active{ transform: translateY(2px) scale(.99); }
-    .bigBtn[disabled]{
-      cursor:not-allowed;
-      filter: grayscale(.25) brightness(.9);
-      opacity:.75;
-    }
+.stage{
+  display:grid;
+  place-items:center;
+  margin-top:10px;
+}
 
-    .smallBtn{
-      appearance:none;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 700;
-      transition: transform .08s ease, background .2s ease;
-    }
-    .smallBtn:hover{ background: rgba(255,255,255,.12); }
-    .smallBtn:active{ transform: translateY(1px); }
+.wheel-wrap{
+  width:min(520px,92vw);
+  aspect-ratio:1/1;
+  position:relative;
+}
 
-    .toggles{
-      display:flex; gap:10px; flex-wrap:wrap;
-      align-items:center;
-    }
-    .toggle{
-      display:flex; align-items:center; gap:8px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.12);
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      color: var(--muted);
-      user-select:none;
-    }
-    .toggle input{ transform: scale(1.1); }
+.pointer{
+  position:absolute;
+  top:-6px;
+  left:50%;
+  transform:translateX(-50%);
+  width:0;height:0;
+  border-left:14px solid transparent;
+  border-right:14px solid transparent;
+  border-bottom:24px solid white;
+  z-index:5;
+}
 
-    /* Wheel area */
-    .wheelWrap{
-      display:grid;
-      place-items:center;
-      padding: 14px 10px 22px;
-      position:relative;
-    }
+canvas{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+  box-shadow:var(--shadow);
+}
 
-    .pointer{
-      position:absolute;
-      top: 12px;
-      width:0; height:0;
-      border-left: 16px solid transparent;
-      border-right: 16px solid transparent;
-      border-top: 26px solid rgba(255,255,255,.92);
-      filter: drop-shadow(0 10px 12px rgba(0,0,0,.45));
-      z-index: 5;
-    }
-    .pointer::after{
-      content:"";
-      position:absolute;
-      left:-10px; top:-22px;
-      width:20px; height:20px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #ffffff, rgba(255,255,255,.65));
-      box-shadow: 0 10px 18px rgba(0,0,0,.35);
-    }
+.lights{
+  position:absolute;
+  inset:-18px;
+  pointer-events:none;
+}
 
-    canvas{
-      width: min(520px, 92vw);
-      height: min(520px, 92vw);
-      max-width: 520px;
-      max-height: 520px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.14), transparent 55%),
-                  radial-gradient(circle at 70% 70%, rgba(255,255,255,.10), transparent 55%),
-                  rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 24px 80px rgba(0,0,0,.55);
-    }
+.light{
+  position:absolute;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#fde047;
+  box-shadow:0 0 12px #fde047;
+}
 
-    .ring{
-      position:absolute;
-      width: min(540px, 96vw);
-      height: min(540px, 96vw);
-      border-radius: 999px;
-      border: 2px solid rgba(255,255,255,.16);
-      box-shadow: inset 0 0 0 6px rgba(255,255,255,.06);
-      pointer-events:none;
-    }
-    .glow{
-      position:absolute;
-      width: min(580px, 100vw);
-      height: min(580px, 100vw);
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(124,255,203,.18), transparent 60%),
-                  radial-gradient(circle, rgba(255,77,222,.12), transparent 55%);
-      filter: blur(2px);
-      pointer-events:none;
-      animation: pulse 2.4s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{ transform: scale(1); opacity:.75; }
-      50%{ transform: scale(1.03); opacity:1; }
-    }
+.result{
+  margin-top:14px;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  min-height:52px;
+}
 
-    .result{
-      margin-top: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    .result strong{
-      font-size: 16px;
-      letter-spacing:.2px;
-    }
-    .pill{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
-      font-size: 12px;
-      color: var(--muted);
-      display:flex; gap:8px; align-items:center;
-    }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: var(--neon);
-      box-shadow: 0 0 14px rgba(124,255,203,.55);
-    }
-    .dot.bad{ background: var(--danger); box-shadow: 0 0 14px rgba(255,59,59,.55); }
-    .dot.good{ background: var(--gold); box-shadow: 0 0 14px rgba(255,211,106,.55); }
+.badge{
+  margin-top:6px;
+  font-weight:800;
+}
 
-    /* Side panel */
-    .side{
-      padding: 16px;
-    }
-    .side h2{
-      margin: 0 0 10px 0;
-      font-size: 16px;
-      color: var(--muted);
-      font-weight: 800;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-    }
-    .side .hint{
-      font-size: 13px;
-      color: var(--muted);
-      line-height:1.35;
-      margin-bottom: 12px;
-    }
+.badge.good{color:var(--good)}
+.badge.skull{color:var(--skull)}
+.badge.myst{color:var(--myst)}
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  place-items:center;
+  z-index:10;
+}
+.overlay.show{display:grid}
 
-    .row{
-      display:grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items:center;
-      padding: 10px 10px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-    }
-    .row input[type="text"]{
-      width:100%;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      padding: 10px 10px;
-      border-radius: 14px;
-      outline:none;
-      font-weight: 700;
-    }
-    .row input[type="text"]::placeholder{
-      color: rgba(244,246,255,.5);
-      font-weight: 600;
-    }
-    .tag{
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing:.5px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      text-transform:uppercase;
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-      display:flex; align-items:center; gap:8px;
-      white-space:nowrap;
-    }
-
-    .tag.good{ border-color: rgba(255,211,106,.35); }
-    .tag.bad{ border-color: rgba(255,59,59,.35); }
-
-    .miniBtn{
-      appearance:none;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.16);
-      color: var(--text);
-      padding: 10px 10px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 900;
-      width: 44px;
-    }
-    .miniBtn:hover{ background: rgba(255,255,255,.09); }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 12px;
-    }
-
-    footer{
-      margin-top: 14px;
-      color: rgba(244,246,255,.65);
-      font-size: 12px;
-      line-height:1.35;
-    }
-
-    /* Confetti canvas overlay */
-    #confetti{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index: 999;
-    }
-
-    /* Little “casino light” marquee */
-    .marquee{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      overflow:hidden;
-      position:relative;
-    }
-    .marquee::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius: 16px;
-      background: conic-gradient(from 0deg, rgba(124,255,203,.0), rgba(124,255,203,.28), rgba(255,77,222,.28), rgba(255,211,106,.28), rgba(124,255,203,.0));
-      filter: blur(10px);
-      opacity:.6;
-      animation: spinGlow 4s linear infinite;
-    }
-    @keyframes spinGlow{ to{ transform: rotate(360deg);} }
-    .marqueeInner{
-      position:relative;
-      display:flex;
-      gap:20px;
-      white-space:nowrap;
-      animation: scroll 10s linear infinite;
-      color: rgba(244,246,255,.9);
-      font-weight: 900;
-      letter-spacing:.6px;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
-    @keyframes scroll{
-      from{ transform: translateX(0); }
-      to{ transform: translateX(-50%); }
-    }
-  </style>
+.modal{
+  background:#0b1020;
+  border-radius:18px;
+  padding:18px;
+  max-width:90vw;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+</style>
 </head>
 
 <body>
-  <div class="sparkles"></div>
-  <canvas id="confetti"></canvas>
+<div class="stars"></div>
 
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="title">
-          🎰 Kid Casino Wheel
-          <span class="badge">offline • single file • parent-approved</span>
-        </div>
-        <div class="subtitle">
-          Spin for a reward… unless it lands on the 💀 skull!
-        </div>
-      </div>
+<div class="wrap">
+  <h1>🎡 Killian’s Spin the Wheel</h1>
+  <div class="sub">Spin for a reward… unless it lands on the 💀 skull!</div>
 
-      <div class="toggles">
-        <label class="toggle" title="Turns sounds on/off">
-          <input id="soundToggle" type="checkbox" checked />
-          🔊 Sound
-        </label>
-        <label class="toggle" title="Turns confetti on/off">
-          <input id="confettiToggle" type="checkbox" checked />
-          🎉 Confetti
-        </label>
-      </div>
-    </header>
-
-    <div class="grid">
-      <!-- Wheel panel -->
-      <div class="panel stage">
-        <div class="stageTop">
-          <button class="bigBtn" id="spinBtn">SPIN THE WHEEL</button>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="smallBtn" id="demoGood">Test WIN 🎁</button>
-            <button class="smallBtn" id="demoSkull">Test SKULL 💀</button>
-          </div>
-        </div>
-
-        <div class="wheelWrap">
-          <div class="pointer" aria-hidden="true"></div>
-          <div class="glow" aria-hidden="true"></div>
-          <div class="ring" aria-hidden="true"></div>
-          <canvas id="wheel" width="900" height="900" aria-label="Spin wheel"></canvas>
-        </div>
-
-        <div class="result" id="resultBox">
-          <div>
-            <div style="color:var(--muted); font-size:12px; font-weight:900; letter-spacing:.4px; text-transform:uppercase;">Result</div>
-            <strong id="resultText">Ready when you are…</strong>
-          </div>
-          <div class="pill" id="resultPill">
-            <span class="dot" id="resultDot"></span>
-            <span id="resultType">Spin to find out!</span>
-          </div>
-        </div>
-
-        <div class="marquee" aria-hidden="true">
-          <div class="marqueeInner">
-            <span>⭐ JACKPOT! ⭐</span><span>🎁 PRIZE TIME 🎁</span><span>🪩 SUPER SPIN 🪩</span><span>✨ WOW ✨</span>
-            <span>⭐ JACKPOT! ⭐</span><span>🎁 PRIZE TIME 🎁</span><span>🪩 SUPER SPIN 🪩</span><span>✨ WOW ✨</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Side panel -->
-      <div class="panel side">
-        <h2>Wheel Items</h2>
-        <div class="hint">
-          Edit the text. Mark items as <b>GOOD</b> (reward) or <b>SKULL</b> (a “do it” task).
-          Then click <b>Update Wheel</b>.
-        </div>
-
-        <div class="list" id="itemsList"></div>
-
-        <div class="actions">
-          <button class="smallBtn" id="addGood">+ Add Reward 🎁</button>
-          <button class="smallBtn" id="addSkull">+ Add Skull 💀</button>
-          <button class="bigBtn" id="updateWheel" style="min-width:auto; padding:12px 14px;">Update Wheel</button>
-        </div>
-
-        <footer>
-          Tip: Keep skull tasks short and doable. If your kid is sensitive to loud sounds,
-          turn off 🔊 Sound. Everything runs offline after saving this file.
-        </footer>
-      </div>
-    </div>
+  <div class="controls">
+    <button class="spin" id="spinBtn">SPIN</button>
+    <button class="secondary" onclick="test('GOOD')">Test WIN</button>
+    <button class="secondary" onclick="test('SKULL')">Test SKULL</button>
+    <button class="secondary" onclick="test('MYSTERY')">Test MYSTERY</button>
   </div>
 
+  <div class="stage">
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <div class="lights" id="lights"></div>
+      <canvas id="wheel" width="800" height="800"></canvas>
+    </div>
+
+    <div class="result">
+      <div id="resultText">Ready to spin!</div>
+      <div id="resultBadge" class="badge"></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="myst">
+  <div class="modal">
+    <h2>❓ Mystery Prize!</h2>
+    <p>Parents decide what this means 🎁</p>
+    <button class="spin" onclick="closeMyst()">OK</button>
+  </div>
+</div>
+
 <script>
-/* ============================
-   Kid Casino Wheel (Offline)
-   Single-file HTML
-   ============================ */
-
-const wheelCanvas = document.getElementById('wheel');
-const ctx = wheelCanvas.getContext('2d');
-
-const spinBtn = document.getElementById('spinBtn');
-const updateWheelBtn = document.getElementById('updateWheel');
-const itemsList = document.getElementById('itemsList');
-
-const resultText = document.getElementById('resultText');
-const resultType = document.getElementById('resultType');
-const resultDot = document.getElementById('resultDot');
-
-const soundToggle = document.getElementById('soundToggle');
-const confettiToggle = document.getElementById('confettiToggle');
-
-const demoGood = document.getElementById('demoGood');
-const demoSkull = document.getElementById('demoSkull');
-
-const addGood = document.getElementById('addGood');
-const addSkull = document.getElementById('addSkull');
-
-// Default items (kid-friendly)
-let items = [
-  { label: "1 small candy 🍬", type: "good", weight: 1 },
-  { label: "Pick a cartoon (10 min) 📺", type: "good", weight: 1 },
-  { label: "Extra bedtime story 📖", type: "good", weight: 1 },
-  { label: "Dance party song 🎵", type: "good", weight: 1 },
-  { label: "Sticker / stamp ⭐", type: "good", weight: 1 },
-  { label: "SKULL: Clean toys 🧸", type: "bad",  weight: 1 },
-  { label: "SKULL: Take a shower 🚿", type: "bad",  weight: 1 },
-  { label: "SKULL: Brush teeth 🪥", type: "bad",  weight: 1 },
+const items=[
+  {t:"Chocolate ice cream 🍫",k:"GOOD"},
+  {t:"Play Xbox for 20 minutes 🎮",k:"GOOD"},
+  {t:"Later bedtime 🌙",k:"GOOD"},
+  {t:"Mystery Prize ❓",k:"MYSTERY"},
+  {t:"SKULL: Brush teeth 🪥",k:"SKULL"},
+  {t:"SKULL: Clean toys 🧸",k:"SKULL"},
 ];
 
-// Spin state
-let angle = 0;             // current wheel angle (radians)
-let spinning = false;
-let spinVelocity = 0;      // radians per frame
-let friction = 0.985;      // slows down the wheel
+const wheel=document.getElementById("wheel");
+const ctx=wheel.getContext("2d");
+let angle=0,vel=0,spinning=false;
 
-// For "tick" sound as segments pass the pointer
-let lastTickIndex = null;
-
-// ======= Utilities =======
-function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-function rand(min, max){ return Math.random() * (max - min) + min; }
-function choice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-// ======= Sound (simple, offline) =======
-let audioCtx = null;
-function ensureAudio(){
-  if(!audioCtx){
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-}
-function beep(freq=700, durMs=50, gainVal=0.05){
-  if(!soundToggle.checked) return;
-  ensureAudio();
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.type = "square";
-  o.frequency.value = freq;
-  g.gain.value = gainVal;
-  o.connect(g);
-  g.connect(audioCtx.destination);
-  o.start();
-  o.stop(audioCtx.currentTime + durMs/1000);
-}
-function winSound(){
-  // a quick happy arpeggio
-  beep(740, 60, 0.06);
-  setTimeout(()=>beep(880, 60, 0.06), 80);
-  setTimeout(()=>beep(1040, 80, 0.06), 160);
-}
-function skullSound(){
-  // lower "uh-oh"
-  beep(220, 140, 0.06);
-  setTimeout(()=>beep(180, 160, 0.06), 160);
-}
-
-// ======= Confetti =======
-const confettiCanvas = document.getElementById('confetti');
-const cctx = confettiCanvas.getContext('2d');
-let confettiPieces = [];
-
-function resizeConfetti(){
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeConfetti);
-resizeConfetti();
-
-function launchConfetti(){
-  if(!confettiToggle.checked) return;
-  const count = 220;
-  confettiPieces = [];
-  for(let i=0;i<count;i++){
-    confettiPieces.push({
-      x: rand(0, confettiCanvas.width),
-      y: rand(-confettiCanvas.height*0.2, -20),
-      vx: rand(-1.6, 1.6),
-      vy: rand(2.4, 5.8),
-      r: rand(3, 7),
-      rot: rand(0, Math.PI*2),
-      vr: rand(-0.12, 0.12),
-      life: rand(70, 130),
-    });
-  }
-}
-
-function stepConfetti(){
-  cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
-  if(confettiPieces.length === 0) return;
-
-  for(const p of confettiPieces){
-    p.x += p.vx;
-    p.y += p.vy;
-    p.rot += p.vr;
-    p.vy *= 0.995;
-    p.vy += 0.03;
-    p.life -= 1;
-
-    // draw a little rectangle
-    cctx.save();
-    cctx.translate(p.x, p.y);
-    cctx.rotate(p.rot);
-    cctx.globalAlpha = clamp(p.life/120, 0, 1);
-    cctx.fillStyle = "white"; // keep simple; looks bright on dark background
-    cctx.fillRect(-p.r, -p.r/2, p.r*2, p.r);
-    cctx.restore();
-  }
-
-  confettiPieces = confettiPieces.filter(p => p.life > 0 && p.y < confettiCanvas.height + 40);
-}
-
-// ======= Item editor UI =======
-function renderItemsEditor(){
-  itemsList.innerHTML = "";
-  items.forEach((it, idx) => {
-    const row = document.createElement('div');
-    row.className = 'row';
-
-    const input = document.createElement('input');
-    input.type = "text";
-    input.value = it.label;
-
-    const tag = document.createElement('div');
-    tag.className = 'tag ' + (it.type === 'good' ? 'good' : 'bad');
-    tag.innerHTML = (it.type === 'good' ? '🎁 GOOD' : '💀 SKULL');
-
-    const del = document.createElement('button');
-    del.className = 'miniBtn';
-    del.title = "Delete item";
-    del.textContent = "✖";
-
-    input.addEventListener('input', () => {
-      items[idx].label = input.value;
-      drawWheel();
-    });
-
-    tag.addEventListener('click', () => {
-      items[idx].type = (items[idx].type === 'good') ? 'bad' : 'good';
-      renderItemsEditor();
-      drawWheel();
-    });
-
-    del.addEventListener('click', () => {
-      items.splice(idx, 1);
-      if(items.length < 2){
-        // keep at least 2 items so wheel works
-        items.push({ label:"Add another item!", type:"good", weight:1 });
-      }
-      renderItemsEditor();
-      drawWheel();
-    });
-
-    row.appendChild(input);
-    row.appendChild(tag);
-    row.appendChild(del);
-    itemsList.appendChild(row);
-  });
-}
-
-// ======= Wheel drawing =======
-function totalWeight(){
-  return items.reduce((s,it)=>s + (Number(it.weight)||1), 0);
-}
-function segmentAngles(){
-  // returns array of [startAngle, endAngle] for each segment
-  const total = totalWeight();
-  const angles = [];
-  let a = 0;
-  for(const it of items){
-    const frac = (Number(it.weight)||1) / total;
-    const span = frac * Math.PI*2;
-    angles.push([a, a + span]);
-    a += span;
-  }
-  return angles;
-}
-
-// Nice-looking colors (generated by hue)
-function segColor(i, type){
-  const hue = (i * 360 / items.length + (type==='bad' ? 10 : 0)) % 360;
-  // Use HSL but convert via CSS string (canvas supports it)
-  const sat = type === 'bad' ? 90 : 85;
-  const light = type === 'bad' ? 48 : 55;
-  return `hsl(${hue} ${sat}% ${light}%)`;
-}
-
-function drawWheel(){
-  const w = wheelCanvas.width;
-  const h = wheelCanvas.height;
-  const cx = w/2, cy = h/2;
-  const radius = Math.min(cx, cy) - 18;
-
-  ctx.clearRect(0,0,w,h);
-
-  // base shadow ring
+function draw(){
+  const r=wheel.width/2;
+  ctx.clearRect(0,0,wheel.width,wheel.height);
   ctx.save();
-  ctx.translate(cx, cy);
-
-  // outer glow ring
-  const g = ctx.createRadialGradient(0,0,radius*0.7, 0,0,radius*1.06);
-  g.addColorStop(0, "rgba(255,255,255,0.02)");
-  g.addColorStop(1, "rgba(255,255,255,0.14)");
-  ctx.strokeStyle = g;
-  ctx.lineWidth = 16;
-  ctx.beginPath();
-  ctx.arc(0,0,radius,0,Math.PI*2);
-  ctx.stroke();
-
-  // segments
-  const angles = segmentAngles();
-
+  ctx.translate(r,r);
   ctx.rotate(angle);
-
-  for(let i=0;i<items.length;i++){
-    const it = items[i];
-    const [a0,a1] = angles[i];
-
-    // segment fill
+  const step=(Math.PI*2)/items.length;
+  items.forEach((it,i)=>{
     ctx.beginPath();
     ctx.moveTo(0,0);
-    ctx.arc(0,0,radius, a0, a1);
-    ctx.closePath();
-    ctx.fillStyle = segColor(i, it.type);
+    ctx.arc(0,0,r,i*step,(i+1)*step);
+    ctx.fillStyle=it.k==="SKULL"?"#ef4444":it.k==="MYSTERY"?"#a855f7":"#22c55e";
     ctx.fill();
-
-    // segment border
-    ctx.strokeStyle = "rgba(255,255,255,0.25)";
-    ctx.lineWidth = 3;
+    ctx.strokeStyle="rgba(255,255,255,.25)";
     ctx.stroke();
-
-    // text
-    const mid = (a0 + a1)/2;
     ctx.save();
-    ctx.rotate(mid);
-    ctx.translate(radius*0.68, 0);
+    ctx.rotate(i*step+step/2);
+    ctx.translate(r*0.65,0);
     ctx.rotate(Math.PI/2);
-
-    const label = it.label.trim() || (it.type==='bad' ? 'SKULL 💀' : 'Prize 🎁');
-    ctx.fillStyle = "rgba(0,0,0,0.75)";
-    ctx.font = "900 32px system-ui, -apple-system, Segoe UI, Roboto, Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // wrap-ish: split at ~18 chars if needed
-    const lines = splitLines(label, 18);
-    if(lines.length === 1){
-      ctx.fillText(lines[0], 0, 0);
-    } else {
-      ctx.fillText(lines[0], 0, -18);
-      ctx.fillText(lines[1], 0,  18);
-    }
-
+    ctx.fillStyle="black";
+    ctx.font="bold 28px system-ui";
+    wrap(it.t,0,0,200,32);
     ctx.restore();
-  }
-
-  // center hub
-  ctx.rotate(-angle); // return to non-rotated for hub
-  ctx.beginPath();
-  ctx.arc(0,0,radius*0.18,0,Math.PI*2);
-  ctx.fillStyle = "rgba(0,0,0,0.35)";
-  ctx.fill();
-  ctx.strokeStyle = "rgba(255,255,255,0.25)";
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
-  // inner shiny disc
-  const g2 = ctx.createRadialGradient(-30,-40, 10, 0,0, radius*0.18);
-  g2.addColorStop(0, "rgba(255,255,255,0.95)");
-  g2.addColorStop(1, "rgba(255,255,255,0.08)");
-  ctx.beginPath();
-  ctx.arc(0,0,radius*0.14,0,Math.PI*2);
-  ctx.fillStyle = g2;
-  ctx.fill();
-
+  });
   ctx.restore();
 }
 
-function splitLines(text, maxChars){
-  const t = text.replace(/\s+/g,' ').trim();
-  if(t.length <= maxChars) return [t];
-  // try to split at space near the middle
-  const mid = Math.floor(t.length/2);
-  let best = -1;
-  for(let i=mid;i>=0;i--){
-    if(t[i] === ' '){ best = i; break; }
+function wrap(text,x,y,max,line){
+  const w=text.split(" ");
+  let l="";
+  let yy=y;
+  for(let i=0;i<w.length;i++){
+    const t=l+w[i]+" ";
+    if(ctx.measureText(t).width>max){
+      ctx.fillText(l,x,yy);
+      l=w[i]+" ";
+      yy+=line;
+    }else l=t;
   }
-  if(best === -1){
-    return [t.slice(0,maxChars), t.slice(maxChars, maxChars*2)];
-  }
-  return [t.slice(0,best).trim(), t.slice(best+1).trim()].slice(0,2);
+  ctx.fillText(l,x,yy);
 }
 
-// ======= Picking the winner =======
-// Pointer is at top: -90deg in canvas terms. Our wheel is rotated by `angle`.
-// We need to find which segment is at pointer.
-function currentIndexAtPointer(customAngle = angle){
-  // pointer angle in wheel space:
-  // Canvas 0 rad is to the right; top is -PI/2.
-  // The wheel has been rotated by `customAngle`, so we subtract it.
-  let pointer = -Math.PI/2 - customAngle;
-
-  // normalize to [0, 2PI)
-  pointer = ((pointer % (Math.PI*2)) + (Math.PI*2)) % (Math.PI*2);
-
-  const angles = segmentAngles();
-  for(let i=0;i<angles.length;i++){
-    const [a0,a1] = angles[i];
-    if(pointer >= a0 && pointer < a1) return i;
-  }
-  return angles.length - 1;
+function spin(){
+  if(spinning)return;
+  vel=Math.random()*0.3+0.25;
+  spinning=true;
 }
 
-function setResult(idx){
-  const it = items[idx];
-  resultText.textContent = it.label || (it.type==='bad' ? "SKULL 💀" : "Prize 🎁");
-
-  if(it.type === 'bad'){
-    resultType.textContent = "SKULL! Do the task 💀";
-    resultDot.classList.remove('good');
-    resultDot.classList.add('bad');
-    skullSound();
-  } else {
-    resultType.textContent = "WIN! Reward time 🎁";
-    resultDot.classList.remove('bad');
-    resultDot.classList.add('good');
-    winSound();
-    launchConfetti();
-  }
-}
-
-// ======= Spinning animation =======
-function spinToRandom(){
-  if(spinning) return;
-  if(items.length < 2) return;
-
-  // Resume audio context on first interaction (browser requirement)
-  if(soundToggle.checked) { ensureAudio(); audioCtx.resume?.(); }
-
-  spinning = true;
-  spinBtn.disabled = true;
-  lastTickIndex = null;
-
-  // Start with a strong velocity
-  spinVelocity = rand(0.28, 0.42); // radians per frame
-  friction = rand(0.985, 0.992);
-
-  // random extra “push”
-  const pushFrames = Math.floor(rand(12, 22));
-  let pushes = 0;
-
-  function frame(){
-    // slight acceleration at start for drama
-    if(pushes < pushFrames){
-      spinVelocity += 0.015;
-      pushes++;
+function update(){
+  if(spinning){
+    angle+=vel;
+    vel*=0.985;
+    if(vel<0.003){
+      spinning=false;
+      pick();
     }
-
-    angle += spinVelocity;
-    spinVelocity *= friction;
-
-    // tick sound when passing into a new segment
-    const idx = currentIndexAtPointer(angle);
-    if(idx !== lastTickIndex){
-      lastTickIndex = idx;
-      beep(900, 18, 0.035);
-    }
-
-    drawWheel();
-    stepConfetti();
-
-    // stop condition
-    if(spinVelocity < 0.0025){
-      spinning = false;
-      spinBtn.disabled = false;
-      const finalIdx = currentIndexAtPointer(angle);
-      setResult(finalIdx);
-      return;
-    }
-    requestAnimationFrame(frame);
   }
-
-  requestAnimationFrame(frame);
+  draw();
+  requestAnimationFrame(update);
 }
 
-// ======= Event handlers =======
-spinBtn.addEventListener('click', spinToRandom);
+function pick(){
+  const step=(Math.PI*2)/items.length;
+  let idx=Math.floor(((Math.PI*1.5-angle)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)/step);
+  const it=items[idx];
+  document.getElementById("resultText").textContent=it.t;
+  const b=document.getElementById("resultBadge");
+  b.textContent=it.k;
+  b.className="badge "+it.k.toLowerCase();
+  if(it.k==="MYSTERY") document.getElementById("myst").classList.add("show");
+}
 
-updateWheelBtn.addEventListener('click', () => {
-  // Remove empty items
-  items = items
-    .map(it => ({...it, label: (it.label||"").trim()}))
-    .filter(it => it.label.length > 0);
+function closeMyst(){
+  document.getElementById("myst").classList.remove("show");
+}
 
-  if(items.length < 2){
-    items = [
-      { label: "Prize 🎁", type:"good", weight:1 },
-      { label: "SKULL 💀", type:"bad", weight:1 },
-    ];
-  }
+function test(k){
+  const it=items.find(x=>x.k===k);
+  document.getElementById("resultText").textContent=it.t;
+  document.getElementById("resultBadge").textContent=k;
+}
 
-  renderItemsEditor();
-  drawWheel();
+document.getElementById("spinBtn").onclick=spin;
+draw();update();
 
-  // tiny feedback beep
-  beep(660, 60, 0.04);
-});
+if("serviceWorker"in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
 
-demoGood.addEventListener('click', () => {
-  const goodIndexes = items.map((it,i)=>it.type==='good'?i:null).filter(i=>i!==null);
-  if(goodIndexes.length === 0) return;
-  setResult(choice(goodIndexes));
-});
-demoSkull.addEventListener('click', () => {
-  const badIndexes = items.map((it,i)=>it.type==='bad'?i:null).filter(i=>i!==null);
-  if(badIndexes.length === 0) return;
-  setResult(choice(badIndexes));
-});
-
-addGood.addEventListener('click', () => {
-  items.push({ label: "New reward 🎁", type:"good", weight:1 });
-  renderItemsEditor();
-  drawWheel();
-  beep(820, 45, 0.04);
-});
-addSkull.addEventListener('click', () => {
-  items.push({ label: "SKULL: New task 💀", type:"bad", weight:1 });
-  renderItemsEditor();
-  drawWheel();
-  beep(260, 55, 0.04);
-});
-
-// init
-renderItemsEditor();
-drawWheel();
-
-// confetti animation loop (keeps it smooth)
-(function confettiLoop(){
-  stepConfetti();
-  requestAnimationFrame(confettiLoop);
-})();
+// lights
+const lights=document.getElementById("lights");
+const count=24;
+for(let i=0;i<count;i++){
+  const d=document.createElement("div");
+  d.className="light";
+  const a=(i/count)*Math.PI*2;
+  d.style.left=50+48*Math.cos(a)+"%";
+  d.style.top=50+48*Math.sin(a)+"%";
+  lights.appendChild(d);
+}
 </script>
 </body>
 </html>
