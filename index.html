@@ -3,39 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#17142a" />
   <title>Killian’s Spin the Wheel</title>
 
-  <!-- If you already have manifest.webmanifest + sw.js in the repo, keep these -->
+  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#171525">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' rx='14' fill='%2317142a'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' font-size='34'%3E%F0%9F%8E%A1%3C/text%3E%3C/svg%3E" />
 
   <style>
     :root{
-      --bg1:#0b0b18;
-      --bg2:#1b1233;
+      --bg0:#0f0d1c;
+      --bg1:#17142a;
       --card:rgba(255,255,255,.08);
       --card2:rgba(255,255,255,.06);
       --stroke:rgba(255,255,255,.12);
       --stroke2:rgba(255,255,255,.18);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.70);
-      --shadow: 0 20px 80px rgba(0,0,0,.45);
-      --round: 22px;
-
-      --wheelSize: 560px; /* JS updates this responsively */
+      --text:#f1f1ff;
+      --muted:rgba(241,241,255,.72);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 22px;
+      --radius2: 16px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1200px 800px at 20% 10%, rgba(255,120,220,.25), transparent 60%),
-        radial-gradient(900px 700px at 85% 10%, rgba(80,220,255,.18), transparent 65%),
-        radial-gradient(1100px 900px at 30% 85%, rgba(120,255,160,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
+        radial-gradient(1000px 700px at 18% 25%, rgba(255,74,180,.18), transparent 60%),
+        radial-gradient(900px 600px at 80% 15%, rgba(0,220,255,.14), transparent 62%),
+        radial-gradient(900px 700px at 60% 80%, rgba(120,255,0,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
       overflow-x:hidden;
     }
 
@@ -57,50 +58,57 @@
     .wrap{
       max-width:1200px;
       margin:0 auto;
-      padding:24px 16px 36px;
+      padding:18px 14px 28px;
     }
 
     header{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
-      gap:16px;
-      margin-bottom:18px;
-    }
-    .title{
-      display:flex; gap:12px; align-items:flex-start;
-    }
-    .title h1{
-      margin:0;
-      font-size: clamp(28px, 3.6vw, 44px);
-      line-height:1.05;
-      letter-spacing:.3px;
-    }
-    .subtitle{
-      margin-top:8px;
-      color:var(--muted);
-      font-size: 16px;
-    }
-    .pill{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 14px;
-      border-radius:999px;
-      background: rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 40px rgba(0,0,0,.25);
-      font-weight:650;
-      font-size:13px;
-      color: rgba(255,255,255,.82);
-      margin-left:10px;
+      gap:14px;
+      margin-bottom:14px;
     }
 
-    .toggles{
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 240px;
+    }
+
+    .title h1{
+      margin:0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height:1.05;
+      letter-spacing:.2px;
+    }
+    .title .sub{
+      color:var(--muted);
+      font-size: 14.5px;
+      line-height:1.35;
+    }
+    .pillrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      padding:9px 12px;
+      border-radius:999px;
+      box-shadow: var(--shadow2);
       display:flex;
       gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+      align-items:center;
+      user-select:none;
+    }
+    .pill small{
+      color:rgba(241,241,255,.78);
+      font-weight:600;
+      letter-spacing:.2px;
     }
     .toggle{
       display:flex;
@@ -108,12 +116,13 @@
       gap:10px;
       padding:10px 14px;
       border-radius:999px;
+      border:1px solid var(--stroke);
       background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      user-select:none;
+      box-shadow: var(--shadow2);
+      cursor:pointer;
     }
-    .toggle input{width:18px;height:18px}
-    .toggle span{color:rgba(255,255,255,.86); font-weight:650}
+    .toggle input{ width:18px; height:18px; accent-color:#7cffd5; cursor:pointer;}
+    .toggle span{ font-weight:700; color:rgba(241,241,255,.9); }
 
     .grid{
       display:grid;
@@ -123,281 +132,340 @@
     }
 
     .card{
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border:1px solid rgba(255,255,255,.12);
-      border-radius: var(--round);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .cardPad{ padding:16px; }
 
-    /* LEFT: wheel area */
-    .wheelTop{
+    .left{
+      padding:16px;
+      position:relative;
+      min-height: 520px;
+    }
+
+    .controlsTop{
       display:flex;
+      flex-wrap:wrap;
+      gap:10px;
       align-items:center;
       justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      padding:18px 18px 0;
+      margin-bottom:12px;
     }
-    .bigBtn{
+
+    .btn{
       border:0;
       cursor:pointer;
-      padding:16px 18px;
-      border-radius: 18px;
+      padding:12px 16px;
+      border-radius: 14px;
+      color:#0e0c18;
       font-weight:900;
-      letter-spacing:.4px;
-      font-size:18px;
-      color:rgba(0,0,0,.82);
-      background: linear-gradient(90deg, #74ffca, #ffd86a, #ff62d0);
-      box-shadow: 0 16px 60px rgba(255,105,210,.18);
-      transition: transform .08s ease;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      background: linear-gradient(90deg, #7cffd5, #ffd56b, #ff63c3);
+      box-shadow: 0 18px 55px rgba(255,99,195,.18), 0 10px 30px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+      user-select:none;
     }
-    .bigBtn:active{transform: translateY(1px) scale(.99)}
-    .bigBtn[disabled]{opacity:.6; cursor:not-allowed}
+    .btn:active{ transform: translateY(1px); }
+    .btn.secondary{
+      background: rgba(255,255,255,.08);
+      color:rgba(241,241,255,.92);
+      border:1px solid var(--stroke);
+      text-transform:none;
+      letter-spacing:.2px;
+      font-weight:800;
+      box-shadow: var(--shadow2);
+    }
+    .btn.secondary:hover{ border-color: var(--stroke2); }
 
-    .smallBtns{
+    .testRow{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
       margin-left:auto;
     }
-    .chipBtn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color:rgba(255,255,255,.86);
-      border-radius: 999px;
-      padding:10px 14px;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow: 0 12px 45px rgba(0,0,0,.22);
-    }
 
-    .wheelStage{
+    /* Wheel stage (CRITICAL: keeps wheel perfectly circular on all devices) */
+    .stage{
       position:relative;
       display:flex;
       justify-content:center;
       align-items:center;
-      padding:18px 14px 22px;
-      min-height: 360px;
+      padding: 12px 0 8px;
     }
 
-    /* pointer */
-    .pointer{
-      position:absolute;
-      top:10px;
-      left:50%;
-      transform: translateX(-50%);
-      width:0;height:0;
-      border-left:18px solid transparent;
-      border-right:18px solid transparent;
-      border-bottom:28px solid rgba(255,255,255,.92);
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.45));
-      z-index: 6;
-    }
-    .pointer::after{
-      content:"";
-      position:absolute;
-      left:-10px;
-      top:18px;
-      width:20px;height:20px;
-      background: rgba(255,255,255,.92);
-      border-radius: 50%;
-      box-shadow: 0 10px 22px rgba(0,0,0,.35);
-    }
-
-    /* wheel + lights lock to same box */
-    .wheelBox{
+    .wheelWrap{
       position:relative;
-      width: var(--wheelSize);
-      max-width: 92vw;
+      width:min(560px, 92vw);
       aspect-ratio: 1 / 1;
+      border-radius: 50%;
       display:grid;
       place-items:center;
+      margin: 0 auto;
+      /* no grey overlay circles here */
     }
 
     canvas#wheel{
       width:100%;
       height:100%;
-      display:block;
       border-radius:50%;
-      filter: drop-shadow(0 18px 70px rgba(0,0,0,.55));
-      z-index: 2;
+      display:block;
+      box-shadow: 0 30px 90px rgba(0,0,0,.55);
+      background: transparent;
     }
 
-    /* light ring */
+    /* Pointer */
+    .pointer{
+      position:absolute;
+      top:-10px;
+      left:50%;
+      transform: translateX(-50%);
+      width:0; height:0;
+      border-left:16px solid transparent;
+      border-right:16px solid transparent;
+      border-top:26px solid rgba(255,255,255,.95);
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,.55));
+      z-index: 7;
+    }
+    .pointer::after{
+      content:"";
+      position:absolute;
+      left:-10px; top:-26px;
+      width:0; height:0;
+      border-left:10px solid transparent;
+      border-right:10px solid transparent;
+      border-top:18px solid rgba(255,255,255,.55);
+      transform: translateY(8px);
+    }
+
+    /* Lights ring */
     .lights{
       position:absolute;
-      inset:-9%;
+      inset:-7.5%;
       border-radius:50%;
-      z-index: 1;
       pointer-events:none;
+      z-index:6;
+      display:block;
     }
-    .light{
+    .lightDot{
       position:absolute;
-      width:14px; height:14px;
+      width:12px; height:12px;
       border-radius:50%;
-      background: rgba(255,255,255,.85);
-      box-shadow: 0 0 18px rgba(255,255,255,.35);
-      opacity:.9;
-      transition: transform .12s linear;
+      background: rgba(255,255,255,.7);
+      box-shadow: 0 0 0 2px rgba(0,0,0,.25), 0 0 18px rgba(255,255,255,.28);
+      opacity:.75;
+      transform: translate(-50%,-50%);
     }
-    .lights.off{display:none}
-    .light.dim{opacity:.55; filter:saturate(.9)}
-    .light.bright{opacity:1}
+    .lightDot.on{
+      opacity:1;
+      box-shadow: 0 0 0 2px rgba(0,0,0,.25), 0 0 24px rgba(255,255,255,.55);
+      background: rgba(255,255,255,.95);
+    }
 
-    /* result modal */
-    .overlay{
-      position:fixed; inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background: rgba(0,0,0,.55);
-      z-index: 50;
-      padding:16px;
-    }
-    .overlay.show{display:flex}
-    .modal{
-      width:min(560px, 95vw);
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(35,28,60,.96), rgba(20,16,34,.96));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 30px 120px rgba(0,0,0,.65);
-      overflow:hidden;
-    }
-    .modalHead{
-      padding:16px 18px;
+    /* Result banner */
+    .result{
+      margin-top:12px;
+      border-radius: var(--radius2);
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      padding:12px 12px;
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    .modalHead b{font-size:16px}
-    .closeX{
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color:rgba(255,255,255,.9);
-      border-radius: 12px;
-      padding:8px 10px;
-      cursor:pointer;
-      font-weight:900;
-    }
-    .modalBody{
-      padding:18px;
-      text-align:center;
-    }
-    .resultBig{
-      font-size: clamp(26px, 3vw, 34px);
-      font-weight:1000;
-      letter-spacing:.2px;
-      margin: 6px 0 10px;
-    }
-    .resultTag{
-      display:inline-flex;
       gap:10px;
       align-items:center;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.88);
-      font-weight:900;
-      margin-bottom:10px;
+      justify-content:space-between;
     }
-    .hint{color:var(--muted); font-size:14px; margin:0}
-
-    /* RIGHT: items editor */
-    .panelHead{
-      padding:16px 16px 10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    .result strong{
+      font-size:15px;
+      letter-spacing:.2px;
     }
-    .panelHead h2{margin:0; font-size:18px; letter-spacing:.3px}
-    .panelHead p{margin:8px 0 0; color:var(--muted); font-size:14px}
+    .result span{
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
 
-    .list{
-      padding:14px;
+    /* Right panel */
+    .right{
+      padding:16px;
+    }
+    .right h2{
+      margin:0 0 6px;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .right p{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:13.5px;
+      line-height:1.35;
+    }
+
+    .items{
       display:flex;
       flex-direction:column;
       gap:10px;
-      max-height: 74vh;
-      overflow:auto;
     }
+
     .row{
       display:grid;
       grid-template-columns: 1fr auto auto;
       gap:10px;
       align-items:center;
       padding:12px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-    }
-    .row input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(15,12,30,.35);
-      color:rgba(255,255,255,.92);
-      outline:none;
-      font-weight:650;
-    }
-    .typePill{
-      cursor:pointer;
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      font-weight:950;
-      min-width: 110px;
-      text-align:center;
-      user-select:none;
-    }
-    .del{
-      cursor:pointer;
-      width:42px;height:42px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.9);
-      font-weight:1000;
-    }
-    .panelFoot{
-      display:flex;
-      gap:10px;
-      padding:14px;
-      border-top:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-    }
-    .btn{
-      flex:1;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.9);
       border-radius: 16px;
-      padding:12px 14px;
-      font-weight:950;
-      cursor:pointer;
-    }
-    .btn.primary{
-      border:0;
-      color: rgba(0,0,0,.82);
-      background: linear-gradient(90deg, #74ffca, #ffd86a, #ff62d0);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
     }
 
-    /* MOBILE */
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-      .list{max-height:none}
-      .wheelStage{min-height: 320px}
-      .smallBtns{justify-content:flex-start; margin-left:0}
+    .row input[type="text"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      outline:none;
+      color:var(--text);
+      background: rgba(0,0,0,.18);
+      font-weight:700;
+      font-size:14px;
     }
-    @media (max-width: 420px){
-      .typePill{min-width: 92px}
-      .chipBtn{padding:9px 12px}
-      .bigBtn{font-size:16px}
+
+    .kind{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      padding:8px 10px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      letter-spacing:.2px;
+      min-width:120px;
+      justify-content:center;
+    }
+    .kind.good{ color:#d7fff2; }
+    .kind.skull{ color:#ffe1ee; }
+    .kind.mystery{ color:#e9e3ff; }
+    .kind b{ font-size:13px; }
+
+    .del{
+      width:40px; height:40px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color:rgba(241,241,255,.92);
+      font-size:18px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow: var(--shadow2);
+    }
+    .del:active{ transform: translateY(1px); }
+
+    .addRow{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+    }
+    .addRow button{
+      width:100%;
+    }
+
+    /* Modal (mystery) */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,.55);
+      z-index:50;
+      padding:18px;
+    }
+    .modal.show{ display:grid; }
+    .modalBox{
+      width:min(520px, 94vw);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.06));
+      box-shadow: 0 40px 120px rgba(0,0,0,.6);
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .modalBox h3{
+      margin:0 0 6px;
+      font-size:22px;
+      letter-spacing:.2px;
+    }
+    .modalBox p{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-weight:700;
+      line-height:1.35;
+    }
+    .mysteryAnim{
+      height:120px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(240px 160px at 20% 50%, rgba(255,99,195,.25), transparent 60%),
+        radial-gradient(240px 160px at 80% 50%, rgba(0,220,255,.22), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.20), rgba(255,255,255,.06));
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .qm{
+      font-size:64px;
+      font-weight:1000;
+      letter-spacing:2px;
+      text-shadow: 0 10px 30px rgba(0,0,0,.55);
+      animation: pop 700ms ease-in-out infinite alternate;
+      user-select:none;
+    }
+    @keyframes pop{
+      from{ transform: scale(1) rotate(-4deg); filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
+      to{ transform: scale(1.10) rotate(4deg); filter: drop-shadow(0 0 22px rgba(255,255,255,.25)); }
+    }
+    .scan{
+      position:absolute; inset:-40%;
+      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,.22), transparent);
+      animation: spin 900ms linear infinite;
+      opacity:.6;
+      mix-blend-mode: screen;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+
+    .modalActions{
+      margin-top:12px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+    }
+
+    /* Confetti canvas */
+    canvas#confetti{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:60;
+      display:none;
+    }
+    canvas#confetti.show{ display:block; }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .left{ min-height: unset; }
+      .pillrow{ justify-content:flex-start; }
+      .testRow{ justify-content:flex-start; }
+      .wheelWrap{ width:min(560px, 96vw); }
     }
   </style>
 </head>
@@ -408,786 +476,731 @@
   <div class="wrap">
     <header>
       <div class="title">
-        <div>
-          <h1>Killian’s<br>Spin the Wheel <span class="pill">offline • single file • parent-approved</span></h1>
-          <div class="subtitle">Spin for a reward… unless it lands on the 💀 skull!</div>
-        </div>
+        <h1>🎰 Killian’s<br/>Spin the Wheel</h1>
+        <div class="sub">Spin for a reward… unless it lands on the ☠️ skull!</div>
       </div>
 
-      <div class="toggles">
-        <label class="toggle">
+      <div class="pillrow">
+        <div class="pill"><small>offline • single file • parent-approved</small></div>
+        <label class="toggle" title="Sound on/off">
           <input id="soundToggle" type="checkbox" checked />
           <span>🔊 Sound</span>
         </label>
-        <label class="toggle">
+        <label class="toggle" title="Confetti on/off">
           <input id="confettiToggle" type="checkbox" checked />
           <span>🎉 Confetti</span>
-        </label>
-        <label class="toggle">
-          <input id="lightsToggle" type="checkbox" checked />
-          <span>💡 Lights</span>
         </label>
       </div>
     </header>
 
     <div class="grid">
-      <!-- LEFT -->
-      <section class="card">
-        <div class="wheelTop">
-          <button id="spinBtn" class="bigBtn">SPIN THE WHEEL</button>
+      <section class="card left">
+        <div class="controlsTop">
+          <button id="spinBtn" class="btn">SPIN THE WHEEL</button>
 
-          <div class="smallBtns">
-            <button class="chipBtn" id="testWin">Test WIN 🎁</button>
-            <button class="chipBtn" id="testSkull">Test SKULL 💀</button>
-            <button class="chipBtn" id="testMystery">Test MYSTERY ❓</button>
+          <div class="testRow">
+            <button id="testWin" class="btn secondary">Test WIN 🎁</button>
+            <button id="testSkull" class="btn secondary">Test SKULL ☠️</button>
+            <button id="testMystery" class="btn secondary">Test MYSTERY ❓</button>
           </div>
         </div>
 
-        <div class="wheelStage">
-          <div class="pointer"></div>
-
-          <div class="wheelBox" id="wheelBox">
+        <div class="stage">
+          <div class="wheelWrap" id="wheelWrap">
+            <div class="pointer"></div>
             <div class="lights" id="lights"></div>
-            <canvas id="wheel" width="900" height="900"></canvas>
+            <canvas id="wheel"></canvas>
           </div>
+        </div>
+
+        <div class="result">
+          <div>
+            <strong id="resultTitle">Ready!</strong>
+            <div><span id="resultSubtitle">Tap SPIN THE WHEEL.</span></div>
+          </div>
+          <button id="updateBtn" class="btn secondary">Update Wheel</button>
         </div>
       </section>
 
-      <!-- RIGHT -->
-      <aside class="card">
-        <div class="panelHead">
-          <h2>WHEEL ITEMS</h2>
-          <p>Tap the pill to switch between <b>GOOD</b>, <b>SKULL</b>, and <b>MYSTERY</b>. Then hit <b>Update Wheel</b>.</p>
-        </div>
-
-        <div class="list" id="list"></div>
-
-        <div class="panelFoot">
-          <button class="btn" id="addRow">+ Add item</button>
-          <button class="btn primary" id="updateWheel">Update Wheel</button>
+      <aside class="card right">
+        <h2>WHEEL ITEMS</h2>
+        <p>Tap the pill to switch between <b>GOOD</b>, <b>SKULL</b>, and <b>MYSTERY</b>. Then hit <b>Update Wheel</b>.</p>
+        <div class="items" id="items"></div>
+        <div class="addRow">
+          <button id="addBtn" class="btn secondary">+ Add item</button>
         </div>
       </aside>
     </div>
   </div>
 
-  <!-- RESULT -->
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <div class="modalHead">
-        <b id="modalTitle">Result</b>
-        <button class="closeX" id="closeModal">✕</button>
+  <div class="modal" id="mysteryModal" aria-hidden="true">
+    <div class="modalBox">
+      <h3>🎁 Mystery Prize!</h3>
+      <p>Parents decide what it is… keep it secret 😄</p>
+      <div class="mysteryAnim" aria-hidden="true">
+        <div class="scan"></div>
+        <div class="qm">❓</div>
       </div>
-      <div class="modalBody">
-        <div class="resultTag" id="resultTag">🎁 GOOD</div>
-        <div class="resultBig" id="resultText">Chocolate ice cream</div>
-        <p class="hint" id="resultHint">Spin again any time!</p>
+      <div class="modalActions">
+        <button id="closeMystery" class="btn secondary">Close</button>
       </div>
     </div>
   </div>
 
-  <script>
-    // --- Simple PWA register (only if sw.js exists) ---
-    (function(){
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(()=>{});
-        });
-      }
-    })();
+  <canvas id="confetti"></canvas>
 
-    // ---- Defaults ----
-    const DEFAULT_ITEMS = [
-      { text: "Chocolate ice cream", type:"GOOD" },
-      { text: "Play Xbox for 20 minutes", type:"GOOD" },
-      { text: "Later bedtime", type:"GOOD" },
-      { text: "Dance party 🎵", type:"GOOD" },
-      { text: "Minecraft skins", type:"GOOD" },
-      { text: "MYSTERY Prize (Parents…)", type:"MYSTERY" },
-      { text: "SKULL: Clean toys 🧸", type:"SKULL" },
-      { text: "SKULL: Take a shower 🚿", type:"SKULL" },
-    ];
-
-    const TYPE_ORDER = ["GOOD","SKULL","MYSTERY"];
-    const TYPE_BADGE = {
-      GOOD:   { label:"🎁 GOOD",   mood:"good" },
-      SKULL:  { label:"💀 SKULL",  mood:"skull" },
-      MYSTERY:{ label:"❓ MYSTERY",mood:"mystery" },
-    };
-
-    // slice colors
-    const PALETTE = [
-      ["#54ffd0","#2fe2ff"],
-      ["#ffd86a","#ff7fd4"],
-      ["#7dff7f","#2fe2ff"],
-      ["#ff92d7","#a18cff"],
-      ["#ff6d7a","#ffcc5a"],
-      ["#6cffc9","#62ffd1"],
-      ["#b65cff","#ff62d0"],
-      ["#4aa6ff","#62ffd1"],
-      ["#ff7f50","#ff62d0"],
-      ["#75ffca","#ffd86a"],
-    ];
-
-    // ---- State ----
-    const storageKey = "killians_wheel_items_v2";
-    let items = loadItems();
-    let spinning = false;
-
-    // ---- Elements ----
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-    const wheelBox = document.getElementById('wheelBox');
-
-    const listEl = document.getElementById('list');
-    const spinBtn = document.getElementById('spinBtn');
-    const overlay = document.getElementById('overlay');
-    const closeModal = document.getElementById('closeModal');
-    const resultText = document.getElementById('resultText');
-    const resultTag = document.getElementById('resultTag');
-    const resultHint = document.getElementById('resultHint');
-
-    const soundToggle = document.getElementById('soundToggle');
-    const confettiToggle = document.getElementById('confettiToggle');
-    const lightsToggle = document.getElementById('lightsToggle');
-
-    const lightsEl = document.getElementById('lights');
-
-    // ---- Build list UI ----
-    function buildList(){
-      listEl.innerHTML = "";
-      items.forEach((it, idx) => {
-        const row = document.createElement('div');
-        row.className = "row";
-
-        const input = document.createElement('input');
-        input.value = it.text;
-        input.placeholder = "Item text…";
-        input.addEventListener('input', () => {
-          items[idx].text = input.value;
-          saveItems();
-          draw();
-        });
-
-        const pill = document.createElement('div');
-        pill.className = "typePill";
-        pill.textContent = it.type === "GOOD" ? "🎁 GOOD" : it.type === "SKULL" ? "💀 SKULL" : "❓ MYSTERY";
-        pill.addEventListener('click', () => {
-          const i = TYPE_ORDER.indexOf(items[idx].type);
-          items[idx].type = TYPE_ORDER[(i+1)%TYPE_ORDER.length];
-          buildList();
-          saveItems();
-          draw();
-        });
-
-        const del = document.createElement('button');
-        del.className = "del";
-        del.textContent = "✕";
-        del.addEventListener('click', () => {
-          items.splice(idx,1);
-          if (items.length < 2) {
-            items.push({text:"Another prize", type:"GOOD"});
-          }
-          buildList();
-          saveItems();
-          draw();
-          buildLights();
-        });
-
-        row.appendChild(input);
-        row.appendChild(pill);
-        row.appendChild(del);
-        listEl.appendChild(row);
-      });
-    }
-
-    document.getElementById('addRow').addEventListener('click', () => {
-      items.push({text:"New item", type:"GOOD"});
-      buildList();
-      saveItems();
-      draw();
-      buildLights();
+<script>
+(() => {
+  // -----------------------------
+  // Service worker (optional but you already have sw.js)
+  // -----------------------------
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(()=>{});
     });
+  }
 
-    document.getElementById('updateWheel').addEventListener('click', () => {
-      saveItems();
-      draw();
-      buildLights();
-      pulseButton(document.getElementById('updateWheel'));
-    });
+  // -----------------------------
+  // State
+  // -----------------------------
+  const DEFAULT_ITEMS = [
+    { text: "Chocolate ice cream", type: "good" },
+    { text: "Play Xbox for 20 minutes", type: "good" },
+    { text: "Later bedtime", type: "good" },
+    { text: "Dance party 🎵", type: "good" },
+    { text: "Minecraft skins", type: "good" },
+    { text: "MYSTERY Prize (Parents…)", type: "mystery" },
+    { text: "SKULL: Clean toys 🧸", type: "skull" },
+    { text: "SKULL: Take a shower 🚿", type: "skull" }
+  ];
 
-    // ---- Load/Save ----
-    function loadItems(){
-      try{
-        const raw = localStorage.getItem(storageKey);
-        if(!raw) return structuredClone(DEFAULT_ITEMS);
-        const parsed = JSON.parse(raw);
-        if(!Array.isArray(parsed) || parsed.length < 2) return structuredClone(DEFAULT_ITEMS);
-        return parsed.map(x => ({
-          text: String(x.text ?? "").slice(0, 120),
-          type: TYPE_ORDER.includes(x.type) ? x.type : "GOOD"
-        }));
-      }catch{
-        return structuredClone(DEFAULT_ITEMS);
-      }
+  const LS_KEY = "killians_wheel_items_v1";
+
+  let items = loadItems();
+  let spinning = false;
+
+  // Wheel rotation state
+  let currentAngle = 0; // radians, where 0 means pointing right; we’ll map to pointer at top
+  let targetAngle = 0;
+
+  // UI
+  const wheelWrap = document.getElementById('wheelWrap');
+  const canvas = document.getElementById('wheel');
+  const ctx = canvas.getContext('2d');
+
+  const itemsEl = document.getElementById('items');
+  const spinBtn = document.getElementById('spinBtn');
+  const updateBtn = document.getElementById('updateBtn');
+  const addBtn = document.getElementById('addBtn');
+
+  const testWin = document.getElementById('testWin');
+  const testSkull = document.getElementById('testSkull');
+  const testMystery = document.getElementById('testMystery');
+
+  const soundToggle = document.getElementById('soundToggle');
+  const confettiToggle = document.getElementById('confettiToggle');
+
+  const resultTitle = document.getElementById('resultTitle');
+  const resultSubtitle = document.getElementById('resultSubtitle');
+
+  const mysteryModal = document.getElementById('mysteryModal');
+  const closeMystery = document.getElementById('closeMystery');
+
+  // Lights
+  const lights = document.getElementById('lights');
+  let lightDots = [];
+  let lightIndex = 0;
+  let lightTimer = null;
+
+  // Confetti
+  const confettiCanvas = document.getElementById('confetti');
+  const cctx = confettiCanvas.getContext('2d');
+  let confettiParticles = [];
+  let confettiAnim = null;
+
+  // Colors for slices
+  const SLICE_COLORS = [
+    ["#42f5c0","#45d7ff"],
+    ["#ffd56b","#ff63c3"],
+    ["#7cffd5","#ffd56b"],
+    ["#45d7ff","#8a6bff"],
+    ["#ff63c3","#45d7ff"],
+    ["#7cffd5","#ff63c3"],
+    ["#8a6bff","#ff63c3"],
+    ["#ff6b8f","#ffb86b"],
+    ["#45d7ff","#7cffd5"],
+    ["#ffd56b","#8a6bff"]
+  ];
+
+  // -----------------------------
+  // Helpers
+  // -----------------------------
+  function loadItems(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return structuredClone(DEFAULT_ITEMS);
+      const parsed = JSON.parse(raw);
+      if(!Array.isArray(parsed) || parsed.length < 2) return structuredClone(DEFAULT_ITEMS);
+      return parsed.map(x => ({
+        text: String(x.text ?? "").slice(0, 80),
+        type: (x.type === "good" || x.type === "skull" || x.type === "mystery") ? x.type : "good"
+      }));
+    }catch{
+      return structuredClone(DEFAULT_ITEMS);
     }
-    function saveItems(){
-      localStorage.setItem(storageKey, JSON.stringify(items));
+  }
+
+  function saveItems(){
+    localStorage.setItem(LS_KEY, JSON.stringify(items));
+  }
+
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+  function pickByType(type){
+    const filtered = items.map((it, idx) => ({...it, idx})).filter(it => it.type === type);
+    if(!filtered.length) return null;
+    return filtered[Math.floor(Math.random() * filtered.length)];
+  }
+
+  // Map pointer at top to an angle in our drawing:
+  // We draw slices starting at angleStart = -PI/2 (top) so labels align to the pointer.
+  const TOP = -Math.PI / 2;
+
+  // -----------------------------
+  // Audio (simple WebAudio blips)
+  // -----------------------------
+  let audioCtx = null;
+  function beep(freq=440, dur=0.06, gain=0.06){
+    if(!soundToggle.checked) return;
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      g.gain.value = gain;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start();
+      o.stop(audioCtx.currentTime + dur);
+    }catch{}
+  }
+
+  // -----------------------------
+  // Lights ring (stable positions)
+  // -----------------------------
+  function buildLights(){
+    lights.innerHTML = "";
+    lightDots = [];
+    const count = 28; // looks good across sizes
+    for(let i=0;i<count;i++){
+      const d = document.createElement('div');
+      d.className = "lightDot";
+      lights.appendChild(d);
+      lightDots.push(d);
     }
-
-    // ---- Responsive wheel sizing ----
-    function updateWheelSize(){
-      const box = wheelBox.getBoundingClientRect();
-      const size = Math.max(260, Math.min(box.width, window.innerWidth * 0.92));
-      document.documentElement.style.setProperty("--wheelSize", size + "px");
-
-      // keep canvas crisp
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(900 * dpr);
-      canvas.height = Math.floor(900 * dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0); // draw in CSS pixels
-      draw();
-      buildLights();
-    }
-
-    window.addEventListener('resize', () => {
-      updateWheelSize();
-    });
-
-    // ---- Draw wheel (THIS FIXES YOUR TEXT ISSUE) ----
-    function draw(){
-      const w = 900, h = 900;
-      ctx.clearRect(0,0,w,h);
-
-      const cx = w/2, cy = h/2;
-      const R = 410;                 // outer radius of wheel
-      const innerR = 88;             // center hub
-      const rimW = 34;
-
-      // rim shadow ring (NO giant grey overlay anymore)
-      ctx.save();
-      ctx.translate(cx,cy);
-      ctx.beginPath();
-      ctx.arc(0,0,R+rimW,0,Math.PI*2);
-      ctx.arc(0,0,R-rimW,0,Math.PI*2,true);
-      ctx.closePath();
-      ctx.fillStyle = "rgba(255,255,255,.06)";
-      ctx.fill();
-
-      // rim highlight
-      ctx.beginPath();
-      ctx.arc(0,0,R+rimW-6,0,Math.PI*2);
-      ctx.strokeStyle = "rgba(255,255,255,.18)";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      ctx.restore();
-
-      const n = Math.max(2, items.length);
-      const step = (Math.PI*2)/n;
-      const startAngle = -Math.PI/2; // pointer at top
-
-      // slices
-      for(let i=0;i<n;i++){
-        const a0 = startAngle + i*step;
-        const a1 = a0 + step;
-
-        const [c1,c2] = PALETTE[i % PALETTE.length];
-
-        // slice fill
-        const grad = ctx.createRadialGradient(cx,cy,innerR, cx,cy,R);
-        grad.addColorStop(0, "rgba(255,255,255,.10)");
-        grad.addColorStop(.22, c1);
-        grad.addColorStop(1, c2);
-
-        ctx.beginPath();
-        ctx.moveTo(cx,cy);
-        ctx.arc(cx,cy,R,a0,a1);
-        ctx.closePath();
-        ctx.fillStyle = grad;
-        ctx.fill();
-
-        // slice border
-        ctx.strokeStyle = "rgba(0,0,0,.35)";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      // hub
-      ctx.save();
-      ctx.translate(cx,cy);
-
-      // inner glow rings
-      for(let k=0;k<4;k++){
-        ctx.beginPath();
-        ctx.arc(0,0, innerR + k*34, 0, Math.PI*2);
-        ctx.strokeStyle = `rgba(255,255,255,${0.14 - k*0.02})`;
-        ctx.lineWidth = 6;
-        ctx.stroke();
-      }
-
-      // center cap
-      const hubGrad = ctx.createRadialGradient(0,0,8, 0,0,innerR+24);
-      hubGrad.addColorStop(0, "rgba(255,255,255,.95)");
-      hubGrad.addColorStop(.25, "rgba(255,255,255,.55)");
-      hubGrad.addColorStop(1, "rgba(255,255,255,.08)");
-      ctx.beginPath();
-      ctx.arc(0,0, innerR+18, 0, Math.PI*2);
-      ctx.fillStyle = hubGrad;
-      ctx.fill();
-
-      // sparkle
-      ctx.beginPath();
-      ctx.arc(0,0, 28, 0, Math.PI*2);
-      ctx.fillStyle = "rgba(255,255,255,.85)";
-      ctx.shadowColor = "rgba(255,255,255,.55)";
-      ctx.shadowBlur = 28;
-      ctx.fill();
-      ctx.restore();
-
-      // labels (the important bit)
-      drawLabels(cx,cy,R,innerR, startAngle, step);
-    }
-
-    function drawLabels(cx,cy,R,innerR, startAngle, step){
-      const n = items.length;
-
-      // label radius in the MIDDLE of each slice (not in the center hub)
-      const labelR = innerR + (R - innerR) * 0.62; // <-- FIX: pushes text into each slice
-      const maxTextWidth = (R - innerR) * 0.82;    // safe wrap width
-
-      for(let i=0;i<n;i++){
-        const mid = startAngle + (i+0.5)*step;
-        const txt = (items[i].text || "").trim();
-
-        // choose font size based on slice count + length
-        let fs = 34;
-        if (n >= 10) fs = 26;
-        if (n >= 12) fs = 22;
-        if (txt.length > 22) fs -= 3;
-        if (txt.length > 34) fs -= 3;
-        fs = Math.max(18, fs);
-
-        ctx.save();
-        ctx.translate(cx,cy);
-        ctx.rotate(mid);
-
-        // draw the text upright-ish (flip if on left side)
-        const flip = (mid > Math.PI/2 && mid < 3*Math.PI/2);
-        if (flip) ctx.rotate(Math.PI);
-
-        // move outward from center into slice
-        ctx.translate(labelR, 0);
-
-        // slight tilt for style
-        ctx.rotate(-Math.PI/2);
-
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "rgba(0,0,0,.78)";
-        ctx.strokeStyle = "rgba(255,255,255,.18)";
-        ctx.lineWidth = 3;
-
-        // wrap text into lines
-        const lines = wrapText(ctx, txt, maxTextWidth, fs);
-
-        // vertical layout
-        const lineH = fs * 1.06;
-        const totalH = lines.length * lineH;
-        let y = -totalH/2 + lineH/2;
-
-        // draw each line with stroke for readability
-        ctx.font = `900 ${fs}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-        for(const line of lines){
-          ctx.strokeText(line, 0, y);
-          ctx.fillText(line, 0, y);
-          y += lineH;
-        }
-
-        ctx.restore();
-      }
-    }
-
-    function wrapText(ctx, text, maxWidth, fontSize){
-      if(!text) return [""];
-
-      // if you have very long words, this prevents overflow
-      const words = text.split(/\s+/g);
-      const lines = [];
-      let line = "";
-
-      // ensure ctx font is set for measure
-      ctx.font = `900 ${fontSize}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
-
-      for(const w of words){
-        const test = line ? (line + " " + w) : w;
-        if(ctx.measureText(test).width <= maxWidth){
-          line = test;
-        } else {
-          if(line) lines.push(line);
-          // word itself too big -> hard break
-          if(ctx.measureText(w).width > maxWidth){
-            lines.push(...hardBreakWord(ctx, w, maxWidth));
-            line = "";
-          } else {
-            line = w;
-          }
-        }
-      }
-      if(line) lines.push(line);
-
-      // limit lines a bit (keeps it neat)
-      if(lines.length > 4){
-        const kept = lines.slice(0,3);
-        kept.push(lines.slice(3).join(" "));
-        return kept;
-      }
-      return lines;
-    }
-
-    function hardBreakWord(ctx, word, maxWidth){
-      const out = [];
-      let cur = "";
-      for(const ch of word){
-        const test = cur + ch;
-        if(ctx.measureText(test).width <= maxWidth){
-          cur = test;
-        } else {
-          out.push(cur);
-          cur = ch;
-        }
-      }
-      if(cur) out.push(cur);
-      return out;
-    }
-
-    // ---- Lights (locked to wheel box) ----
-    function buildLights(){
-      const on = lightsToggle.checked;
-      lightsEl.classList.toggle("off", !on);
-      if(!on) return;
-
-      lightsEl.innerHTML = "";
-      const count = Math.max(18, Math.min(30, items.length * 3));
-      for(let i=0;i<count;i++){
-        const d = document.createElement('div');
-        d.className = "light " + (i%2 ? "dim" : "bright");
-        d.dataset.i = String(i);
-        lightsEl.appendChild(d);
-      }
-      positionLights();
-    }
-
-    function positionLights(){
-      if(lightsEl.classList.contains("off")) return;
-      const rect = lightsEl.getBoundingClientRect();
-      const cx = rect.width/2, cy = rect.height/2;
-      const r = Math.min(rect.width, rect.height) * 0.48;
-
-      const lights = [...lightsEl.querySelectorAll('.light')];
-      const count = lights.length || 1;
-      lights.forEach((el, i) => {
-        const t = (i / count) * Math.PI*2 - Math.PI/2;
-        const x = cx + Math.cos(t) * r;
-        const y = cy + Math.sin(t) * r;
-        el.style.left = (x - 7) + "px";
-        el.style.top  = (y - 7) + "px";
-      });
-    }
-
-    window.addEventListener('resize', positionLights);
-
-    // blink animation
-    let blinkT = 0;
-    setInterval(() => {
-      if(lightsEl.classList.contains("off")) return;
-      const lights = [...lightsEl.querySelectorAll('.light')];
-      blinkT++;
-      lights.forEach((el, i) => {
-        const on = ((i + blinkT) % 4) < 2;
-        el.style.opacity = on ? "1" : ".55";
-      });
-    }, 180);
-
-    // ---- Spin logic ----
-    let currentAngle = 0; // radians
-    function spinToIndex(targetIndex){
-      if(spinning) return;
-      spinning = true;
-      spinBtn.disabled = true;
-
-      const n = items.length;
-      const step = (Math.PI*2)/n;
-
-      // pointer at top; want target slice center under pointer
-      const startAngle = -Math.PI/2;
-      const targetMid = startAngle + (targetIndex + 0.5) * step;
-
-      // We rotate wheel so that targetMid aligns with -PI/2 (pointer).
-      // wheel rotation is currentAngle; label angles are drawn in wheel space.
-      // For display, we rotate canvas via transform by currentAngle.
-      // We'll animate currentAngle to land precisely.
-      const extraSpins = 6 + Math.floor(Math.random()*3);
-      const desired = (Math.PI*2)*extraSpins + (-Math.PI/2 - targetMid);
-
-      const from = currentAngle;
-      const to = from + normalizeAngle(desired);
-
-      const dur = 3600 + Math.random()*700;
-      const t0 = performance.now();
-
-      tickSoundStart();
-
-      function anim(t){
-        const p = Math.min(1, (t - t0) / dur);
-        const e = easeOutCubic(p);
-        currentAngle = from + (to - from) * e;
-        renderRotated();
-        if(p < 1){
-          requestAnimationFrame(anim);
-        } else {
-          spinning = false;
-          spinBtn.disabled = false;
-          tickSoundStop();
-          const picked = items[targetIndex];
-          showResult(picked);
-          if(confettiToggle.checked) confettiBurst(picked.type);
-        }
-      }
-      requestAnimationFrame(anim);
-    }
-
-    function renderRotated(){
-      // draw wheel into an offscreen transform by rotating the whole canvas
-      const w = 900, h = 900;
-      ctx.save();
-      ctx.clearRect(0,0,w,h);
-      ctx.translate(w/2,h/2);
-      ctx.rotate(currentAngle);
-      ctx.translate(-w/2,-h/2);
-
-      // draw base wheel in rotated space
-      // (call draw but without resetting transform) -> easiest: drawWheelContent()
-      drawWheelContent();
-
-      ctx.restore();
-    }
-
-    function drawWheelContent(){
-      const w = 900, h = 900;
-      const cx = w/2, cy = h/2;
-      const R = 410;
-      const innerR = 88;
-      const rimW = 34;
-
-      // rim (no grey overlay)
-      ctx.save();
-      ctx.translate(cx,cy);
-      ctx.beginPath();
-      ctx.arc(0,0,R+rimW,0,Math.PI*2);
-      ctx.arc(0,0,R-rimW,0,Math.PI*2,true);
-      ctx.closePath();
-      ctx.fillStyle = "rgba(255,255,255,.06)";
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(0,0,R+rimW-6,0,Math.PI*2);
-      ctx.strokeStyle = "rgba(255,255,255,.18)";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      ctx.restore();
-
-      const n = Math.max(2, items.length);
-      const step = (Math.PI*2)/n;
-      const startAngle = -Math.PI/2;
-
-      for(let i=0;i<n;i++){
-        const a0 = startAngle + i*step;
-        const a1 = a0 + step;
-        const [c1,c2] = PALETTE[i % PALETTE.length];
-
-        const grad = ctx.createRadialGradient(cx,cy,innerR, cx,cy,R);
-        grad.addColorStop(0, "rgba(255,255,255,.10)");
-        grad.addColorStop(.22, c1);
-        grad.addColorStop(1, c2);
-
-        ctx.beginPath();
-        ctx.moveTo(cx,cy);
-        ctx.arc(cx,cy,R,a0,a1);
-        ctx.closePath();
-        ctx.fillStyle = grad;
-        ctx.fill();
-
-        ctx.strokeStyle = "rgba(0,0,0,.35)";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      // hub
-      ctx.save();
-      ctx.translate(cx,cy);
-      for(let k=0;k<4;k++){
-        ctx.beginPath();
-        ctx.arc(0,0, innerR + k*34, 0, Math.PI*2);
-        ctx.strokeStyle = `rgba(255,255,255,${0.14 - k*0.02})`;
-        ctx.lineWidth = 6;
-        ctx.stroke();
-      }
-      const hubGrad = ctx.createRadialGradient(0,0,8, 0,0,innerR+24);
-      hubGrad.addColorStop(0, "rgba(255,255,255,.95)");
-      hubGrad.addColorStop(.25, "rgba(255,255,255,.55)");
-      hubGrad.addColorStop(1, "rgba(255,255,255,.08)");
-      ctx.beginPath();
-      ctx.arc(0,0, innerR+18, 0, Math.PI*2);
-      ctx.fillStyle = hubGrad;
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(0,0, 28, 0, Math.PI*2);
-      ctx.fillStyle = "rgba(255,255,255,.85)";
-      ctx.shadowColor = "rgba(255,255,255,.55)";
-      ctx.shadowBlur = 28;
-      ctx.fill();
-      ctx.restore();
-
-      drawLabels(cx,cy,R,innerR, startAngle, step);
-    }
-
-    function normalizeAngle(a){
-      // keep as positive-ish spin
-      return a;
-    }
-
-    function easeOutCubic(x){
-      return 1 - Math.pow(1-x, 3);
-    }
-
-    // initial non-rotated draw
-    function draw(){
-      currentAngle = currentAngle || 0;
-      renderRotated();
-    }
-
-    // ---- Picking ----
-    function pickRandomIndex(){
-      return Math.floor(Math.random() * items.length);
-    }
-    function pickByType(type){
-      const idxs = items.map((it,i)=> it.type===type ? i : -1).filter(i=>i>=0);
-      if(!idxs.length) return pickRandomIndex();
-      return idxs[Math.floor(Math.random()*idxs.length)];
-    }
-
-    spinBtn.addEventListener('click', () => spinToIndex(pickRandomIndex()));
-    document.getElementById('testWin').addEventListener('click', () => spinToIndex(pickByType("GOOD")));
-    document.getElementById('testSkull').addEventListener('click', () => spinToIndex(pickByType("SKULL")));
-    document.getElementById('testMystery').addEventListener('click', () => spinToIndex(pickByType("MYSTERY")));
-
-    // ---- Modal ----
-    function showResult(item){
-      const meta = TYPE_BADGE[item.type] || TYPE_BADGE.GOOD;
-      resultTag.textContent = meta.label;
-      resultText.textContent = item.text || "";
-      resultHint.textContent =
-        item.type === "MYSTERY"
-          ? "Mystery time — parents decide the prize! 😄"
-          : (item.type === "SKULL" ? "Uh oh… time to do the thing 😅" : "Nice! Enjoy your reward 🎉");
-      overlay.classList.add('show');
-    }
-    closeModal.addEventListener('click', () => overlay.classList.remove('show'));
-    overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('show'); });
-
-    // ---- Confetti (simple) ----
-    function confettiBurst(type){
-      const count = type === "SKULL" ? 50 : type === "MYSTERY" ? 90 : 120;
-      const layer = document.createElement('div');
-      layer.style.position = "fixed";
-      layer.style.inset = "0";
-      layer.style.pointerEvents = "none";
-      layer.style.zIndex = "80";
-      document.body.appendChild(layer);
-
-      const w = window.innerWidth, h = window.innerHeight;
-      for(let i=0;i<count;i++){
-        const p = document.createElement('div');
-        p.style.position = "absolute";
-        p.style.left = (w*0.5 + (Math.random()*220-110)) + "px";
-        p.style.top = (h*0.25 + (Math.random()*40-20)) + "px";
-        p.style.width = (6 + Math.random()*8) + "px";
-        p.style.height = (8 + Math.random()*12) + "px";
-        p.style.borderRadius = "3px";
-        p.style.background = `hsl(${Math.floor(Math.random()*360)}, 85%, 65%)`;
-        p.style.opacity = ".95";
-        p.style.transform = `rotate(${Math.random()*360}deg)`;
-        layer.appendChild(p);
-
-        const dx = (Math.random()*2-1) * 520;
-        const dy = 520 + Math.random()*520;
-        const rot = (Math.random()*2-1) * 720;
-        const dur = 900 + Math.random()*900;
-
-        p.animate([
-          { transform:`translate(0,0) rotate(0deg)`, opacity:.95 },
-          { transform:`translate(${dx}px, ${dy}px) rotate(${rot}deg)`, opacity:0 }
-        ], { duration: dur, easing: 'cubic-bezier(.15,.7,.25,1)', fill:'forwards' });
-      }
-
-      setTimeout(()=> layer.remove(), 2200);
-    }
-
-    // ---- Tiny sounds (no files) ----
-    let audioCtx = null;
-    let tickOsc = null;
-    let tickGain = null;
-
-    function tickSoundStart(){
-      if(!soundToggle.checked) return;
-      try{
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        tickOsc = audioCtx.createOscillator();
-        tickGain = audioCtx.createGain();
-        tickOsc.type = "triangle";
-        tickOsc.frequency.value = 880;
-        tickGain.gain.value = 0.0001;
-        tickOsc.connect(tickGain).connect(audioCtx.destination);
-        tickOsc.start();
-        // tiny pulse loop
-        let on = false;
-        const id = setInterval(() => {
-          if(!tickGain){ clearInterval(id); return; }
-          on = !on;
-          tickGain.gain.setTargetAtTime(on ? 0.04 : 0.001, audioCtx.currentTime, 0.01);
-        }, 90);
-        tickGain._id = id;
-      }catch{}
-    }
-
-    function tickSoundStop(){
-      try{
-        if(tickGain && tickGain._id) clearInterval(tickGain._id);
-        if(tickOsc) tickOsc.stop();
-        tickOsc = null;
-        tickGain = null;
-      }catch{}
-    }
-
-    // ---- UI helpers ----
-    function pulseButton(btn){
-      btn.animate([
-        { transform:"scale(1)" },
-        { transform:"scale(1.03)" },
-        { transform:"scale(1)" }
-      ], {duration: 240, easing:"ease-out"});
-    }
-
-    // toggles
-    lightsToggle.addEventListener('change', () => { buildLights(); positionLights(); });
-    // (sound/confetti are read live)
-
-    // init
-    buildList();
-    updateWheelSize();
-    buildLights();
     positionLights();
-    renderRotated();
-  </script>
+  }
+
+  function positionLights(){
+    // Use the lights element box; place dots on a circle in its own coords
+    const rect = lights.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    const cx = w/2, cy = h/2;
+    const r = Math.min(w,h) * 0.48; // safe radius inside element
+    const n = lightDots.length || 1;
+    for(let i=0;i<n;i++){
+      const a = (i / n) * Math.PI * 2 + TOP;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      const dot = lightDots[i];
+      dot.style.left = x + "px";
+      dot.style.top  = y + "px";
+    }
+  }
+
+  function startLights(speed=90){
+    stopLights();
+    lightTimer = setInterval(() => {
+      if(!lightDots.length) return;
+      lightDots.forEach(d => d.classList.remove('on'));
+      lightDots[lightIndex % lightDots.length].classList.add('on');
+      lightIndex++;
+    }, speed);
+  }
+
+  function stopLights(){
+    if(lightTimer){ clearInterval(lightTimer); lightTimer=null; }
+    lightDots.forEach(d => d.classList.remove('on'));
+  }
+
+  // -----------------------------
+  // Confetti
+  // -----------------------------
+  function resizeConfetti(){
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    confettiCanvas.width = Math.floor(innerWidth * dpr);
+    confettiCanvas.height = Math.floor(innerHeight * dpr);
+    cctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function fireConfetti(ms=1200){
+    if(!confettiToggle.checked) return;
+    resizeConfetti();
+    confettiCanvas.classList.add('show');
+    confettiParticles = [];
+    const count = 140;
+    for(let i=0;i<count;i++){
+      confettiParticles.push({
+        x: innerWidth*0.5 + (Math.random()-0.5)*120,
+        y: innerHeight*0.25 + (Math.random()-0.5)*60,
+        vx: (Math.random()-0.5)*6,
+        vy: Math.random()*-6 - 2,
+        g: 0.18 + Math.random()*0.1,
+        s: 4 + Math.random()*4,
+        a: Math.random()*Math.PI*2,
+        va: (Math.random()-0.5)*0.2,
+        life: 1
+      });
+    }
+    const start = performance.now();
+    cancelAnimationFrame(confettiAnim);
+    (function loop(t){
+      const dt = 16;
+      cctx.clearRect(0,0,innerWidth,innerHeight);
+      confettiParticles.forEach(p => {
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.a += p.va;
+        p.life *= 0.992;
+        cctx.save();
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.a);
+        cctx.globalAlpha = clamp(p.life, 0, 1);
+        cctx.fillRect(-p.s/2, -p.s/2, p.s, p.s*0.7);
+        cctx.restore();
+      });
+      if(t - start < ms){
+        confettiAnim = requestAnimationFrame(loop);
+      }else{
+        confettiCanvas.classList.remove('show');
+        cctx.clearRect(0,0,innerWidth,innerHeight);
+      }
+    })(start);
+  }
+
+  // -----------------------------
+  // Wheel drawing (FIXES: text stays in each slice)
+  // -----------------------------
+  function resizeWheel(){
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const rect = wheelWrap.getBoundingClientRect();
+    const size = Math.floor(Math.min(rect.width, rect.height));
+    canvas.width = Math.floor(size * dpr);
+    canvas.height = Math.floor(size * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    drawWheel();
+  }
+
+  function drawWheel(){
+    const rect = wheelWrap.getBoundingClientRect();
+    const size = Math.floor(Math.min(rect.width, rect.height));
+    const cx = size/2;
+    const cy = size/2;
+    const outerR = size * 0.48;
+    const rimR   = size * 0.495;
+
+    ctx.clearRect(0,0,size,size);
+
+    // Outer rim glow
+    const g0 = ctx.createRadialGradient(cx,cy,outerR*0.7, cx,cy,rimR);
+    g0.addColorStop(0, "rgba(255,255,255,.06)");
+    g0.addColorStop(1, "rgba(255,255,255,.18)");
+    ctx.beginPath();
+    ctx.arc(cx,cy,rimR,0,Math.PI*2);
+    ctx.fillStyle = g0;
+    ctx.fill();
+
+    // Slices
+    const n = Math.max(2, items.length);
+    const slice = (Math.PI*2)/n;
+
+    for(let i=0;i<n;i++){
+      const a0 = TOP + i*slice + currentAngle;
+      const a1 = a0 + slice;
+
+      const [cA, cB] = SLICE_COLORS[i % SLICE_COLORS.length];
+      const grad = ctx.createLinearGradient(
+        cx + Math.cos(a0)*outerR, cy + Math.sin(a0)*outerR,
+        cx + Math.cos(a1)*outerR, cy + Math.sin(a1)*outerR
+      );
+      grad.addColorStop(0, cA);
+      grad.addColorStop(1, cB);
+
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,outerR,a0,a1);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // slice border
+      ctx.strokeStyle = "rgba(0,0,0,.35)";
+      ctx.lineWidth = Math.max(1.5, size*0.004);
+      ctx.stroke();
+    }
+
+    // Inner rings
+    const ring1 = ctx.createRadialGradient(cx,cy,0, cx,cy, outerR*0.62);
+    ring1.addColorStop(0, "rgba(255,255,255,.08)");
+    ring1.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.beginPath();
+    ctx.arc(cx,cy,outerR*0.62,0,Math.PI*2);
+    ctx.fillStyle = ring1;
+    ctx.fill();
+
+    // Center hub
+    const hubR = outerR*0.16;
+    const hub = ctx.createRadialGradient(cx,cy,hubR*0.1, cx,cy,hubR);
+    hub.addColorStop(0, "rgba(255,255,255,.98)");
+    hub.addColorStop(1, "rgba(255,255,255,.30)");
+    ctx.beginPath();
+    ctx.arc(cx,cy,hubR,0,Math.PI*2);
+    ctx.fillStyle = hub;
+    ctx.fill();
+
+    // Labels (CRITICAL: per-slice transform so they never collapse into center)
+    for(let i=0;i<n;i++){
+      const label = (items[i]?.text ?? "").trim();
+      if(!label) continue;
+
+      const aMid = TOP + (i+0.5)*slice + currentAngle;
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(aMid);
+
+      // Put text OUT in the slice, not in the center
+      const textR = outerR * 0.67;
+      ctx.translate(textR, 0);
+
+      // Make text readable: flip if upside down
+      const deg = (aMid * 180/Math.PI) % 360;
+      if(deg > 90 && deg < 270){
+        ctx.rotate(Math.PI);
+      }
+
+      const maxWidth = outerR * 0.55;
+      const baseSize = clamp(size * 0.045, 12, 22); // scales with wheel
+      ctx.font = `900 ${baseSize}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+      ctx.fillStyle = "rgba(0,0,0,.78)";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      drawWrappedText(ctx, label, 0, 0, maxWidth, baseSize * 1.08);
+
+      ctx.restore();
+    }
+
+    // subtle outer shadow ring
+    ctx.beginPath();
+    ctx.arc(cx,cy,outerR,0,Math.PI*2);
+    ctx.strokeStyle = "rgba(255,255,255,.12)";
+    ctx.lineWidth = Math.max(2, size*0.006);
+    ctx.stroke();
+  }
+
+  function drawWrappedText(c, text, x, y, maxWidth, lineHeight){
+    // Simple word wrap into up to 3 lines (kids wheel labels)
+    const words = text.replace(/\s+/g,' ').trim().split(' ');
+    const lines = [];
+    let line = "";
+
+    for(const w of words){
+      const test = line ? (line + " " + w) : w;
+      if(c.measureText(test).width <= maxWidth){
+        line = test;
+      }else{
+        if(line) lines.push(line);
+        line = w;
+      }
+    }
+    if(line) lines.push(line);
+
+    // Cap lines to 3; compress if too many
+    while(lines.length > 3){
+      lines[1] = (lines[1] + " " + lines[2]).trim();
+      lines.splice(2,1);
+    }
+
+    // If still too wide, shrink font slightly
+    let tries = 0;
+    while(lines.some(l => c.measureText(l).width > maxWidth) && tries < 8){
+      const m = c.font.match(/(\d+(?:\.\d+)?)px/);
+      const px = m ? parseFloat(m[1]) : 18;
+      c.font = c.font.replace(/(\d+(?:\.\d+)?)px/, (px * 0.92).toFixed(1) + "px");
+      tries++;
+    }
+
+    const totalH = (lines.length-1) * lineHeight;
+    lines.forEach((ln, i) => {
+      c.fillText(ln, x, y - totalH/2 + i*lineHeight);
+    });
+  }
+
+  // -----------------------------
+  // UI list builder
+  // -----------------------------
+  function renderList(){
+    itemsEl.innerHTML = "";
+    items.forEach((it, idx) => {
+      const row = document.createElement('div');
+      row.className = "row";
+
+      const input = document.createElement('input');
+      input.type = "text";
+      input.value = it.text;
+      input.addEventListener('input', () => {
+        items[idx].text = input.value.slice(0,80);
+        saveItems();
+      });
+
+      const kind = document.createElement('div');
+      kind.className = "kind " + it.type;
+      kind.innerHTML = kindLabel(it.type);
+      kind.addEventListener('click', () => {
+        items[idx].type = nextType(items[idx].type);
+        kind.className = "kind " + items[idx].type;
+        kind.innerHTML = kindLabel(items[idx].type);
+        saveItems();
+      });
+
+      const del = document.createElement('button');
+      del.className = "del";
+      del.textContent = "×";
+      del.title = "Remove item";
+      del.addEventListener('click', () => {
+        items.splice(idx, 1);
+        if(items.length < 2) items.push({text:"New prize!", type:"good"});
+        saveItems();
+        renderList();
+        drawWheel();
+      });
+
+      row.appendChild(input);
+      row.appendChild(kind);
+      row.appendChild(del);
+      itemsEl.appendChild(row);
+    });
+  }
+
+  function kindLabel(type){
+    if(type === "good") return "🎁 <b>GOOD</b>";
+    if(type === "skull") return "☠️ <b>SKULL</b>";
+    return "❓ <b>MYSTERY</b>";
+  }
+  function nextType(t){
+    return (t === "good") ? "skull" : (t === "skull") ? "mystery" : "good";
+  }
+
+  // -----------------------------
+  // Spin logic
+  // -----------------------------
+  function spinToIndex(index, forcedType=null){
+    if(spinning) return;
+    if(items.length < 2) return;
+
+    spinning = true;
+    spinBtn.disabled = true;
+
+    // Faster chasing lights during spin
+    startLights(60);
+
+    // Choose target so that slice lands at pointer TOP:
+    // We want slice mid-angle (TOP + (index+0.5)*slice + angle) to align with TOP => angle should be - (index+0.5)*slice (mod 2pi)
+    const n = items.length;
+    const slice = (Math.PI*2)/n;
+
+    const desired = - (index + 0.5) * slice;
+    const spins = 5 + Math.floor(Math.random()*3); // 5..7
+    targetAngle = desired + spins * Math.PI * 2;
+
+    const startAngle = currentAngle;
+    const delta = targetAngle - startAngle;
+
+    const duration = 4200 + Math.random()*900;
+    const start = performance.now();
+
+    beep(520, 0.06, 0.05);
+
+    (function anim(t){
+      const p = clamp((t - start) / duration, 0, 1);
+      // easeOutCubic
+      const e = 1 - Math.pow(1 - p, 3);
+
+      currentAngle = startAngle + delta * e;
+      drawWheel();
+
+      // little tick beeps
+      if(Math.random() < 0.08) beep(380 + Math.random()*260, 0.03, 0.03);
+
+      if(p < 1){
+        requestAnimationFrame(anim);
+      }else{
+        // finish
+        currentAngle = targetAngle % (Math.PI*2);
+        drawWheel();
+        finishSpin(forcedType);
+      }
+    })(start);
+  }
+
+  function finishSpin(forcedType=null){
+    stopLights();
+    startLights(110);
+
+    spinning = false;
+    spinBtn.disabled = false;
+
+    const landedIndex = getLandedIndex();
+    const landed = items[landedIndex];
+
+    if(!landed){
+      setResult("Hmm…", "No item found. Try Update Wheel.");
+      return;
+    }
+
+    // Show result
+    if(landed.type === "skull"){
+      setResult("☠️ SKULL!", landed.text);
+      beep(140, 0.18, 0.07);
+    }else if(landed.type === "mystery"){
+      setResult("❓ MYSTERY!", landed.text);
+      beep(640, 0.12, 0.06);
+      setTimeout(() => showMystery(), 250);
+    }else{
+      setResult("🎁 WIN!", landed.text);
+      beep(740, 0.12, 0.06);
+      setTimeout(() => beep(980, 0.12, 0.06), 90);
+      fireConfetti(1400);
+    }
+  }
+
+  function getLandedIndex(){
+    // Determine which slice is at TOP given currentAngle.
+    const n = items.length;
+    const slice = (Math.PI*2)/n;
+
+    // For slice i, its mid = TOP + (i+0.5)*slice + currentAngle.
+    // We want the one whose mid is closest to TOP => minimize angular difference.
+    let bestI = 0;
+    let bestD = Infinity;
+    for(let i=0;i<n;i++){
+      const mid = TOP + (i+0.5)*slice + currentAngle;
+      const d = angleDistance(mid, TOP);
+      if(d < bestD){ bestD = d; bestI = i; }
+    }
+    return bestI;
+  }
+
+  function angleDistance(a,b){
+    let d = (a - b) % (Math.PI*2);
+    if(d < -Math.PI) d += Math.PI*2;
+    if(d >  Math.PI) d -= Math.PI*2;
+    return Math.abs(d);
+  }
+
+  function setResult(title, subtitle){
+    resultTitle.textContent = title;
+    resultSubtitle.textContent = subtitle;
+  }
+
+  function showMystery(){
+    mysteryModal.classList.add('show');
+    mysteryModal.setAttribute('aria-hidden', 'false');
+  }
+  function hideMystery(){
+    mysteryModal.classList.remove('show');
+    mysteryModal.setAttribute('aria-hidden', 'true');
+  }
+
+  // -----------------------------
+  // Buttons
+  // -----------------------------
+  spinBtn.addEventListener('click', () => {
+    // weighted: more good than skull if you want; currently equal by slice count
+    const idx = Math.floor(Math.random()*items.length);
+    spinToIndex(idx);
+  });
+
+  updateBtn.addEventListener('click', () => {
+    // clean + ensure at least 2 items
+    items = items
+      .map(it => ({ text: String(it.text||"").slice(0,80), type: it.type }))
+      .filter(it => it.text.trim().length > 0);
+
+    if(items.length < 2){
+      items = structuredClone(DEFAULT_ITEMS);
+    }
+    saveItems();
+    renderList();
+    resizeWheel();
+    setResult("Updated!", "Wheel updated from your list.");
+    beep(640, 0.07, 0.05);
+  });
+
+  addBtn.addEventListener('click', () => {
+    items.push({ text: "New prize!", type: "good" });
+    saveItems();
+    renderList();
+    drawWheel();
+    beep(520, 0.05, 0.04);
+  });
+
+  testWin.addEventListener('click', () => {
+    const picked = pickByType("good");
+    if(!picked){ setResult("No GOOD items", "Add at least one GOOD item."); return; }
+    spinToIndex(picked.idx, "good");
+  });
+  testSkull.addEventListener('click', () => {
+    const picked = pickByType("skull");
+    if(!picked){ setResult("No SKULL items", "Add at least one SKULL item."); return; }
+    spinToIndex(picked.idx, "skull");
+  });
+  testMystery.addEventListener('click', () => {
+    const picked = pickByType("mystery");
+    if(!picked){ setResult("No MYSTERY items", "Add a MYSTERY item."); return; }
+    spinToIndex(picked.idx, "mystery");
+  });
+
+  closeMystery.addEventListener('click', hideMystery);
+  mysteryModal.addEventListener('click', (e) => {
+    if(e.target === mysteryModal) hideMystery();
+  });
+
+  // -----------------------------
+  // Init
+  // -----------------------------
+  renderList();
+  buildLights();
+  startLights(120);
+
+  // Resize handlers
+  const ro = new ResizeObserver(() => {
+    resizeWheel();
+    positionLights();
+  });
+  ro.observe(wheelWrap);
+
+  window.addEventListener('resize', () => {
+    resizeWheel();
+    positionLights();
+    resizeConfetti();
+  });
+
+  resizeWheel();
+  resizeConfetti();
+
+})();
+</script>
 </body>
 </html>
